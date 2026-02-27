@@ -29,7 +29,7 @@ const LocalFuncReadFromTally = async () => {
     } catch (err) {
         console.error("Import Failed");
         console.log(err.response?.data || err.message);
-    };
+    }
 };
 
 LocalFuncReadFromTally();

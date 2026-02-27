@@ -8,7 +8,7 @@ const LocalFuncReadFromTally = async () => {
         const body = JSON.parse(template);
 
         console.log("Sending Voucher to Tally...");
-        const tallyRes = await fetch('http://localhost:9000', {
+        const response = await fetch('http://localhost:9000', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -19,17 +19,24 @@ const LocalFuncReadFromTally = async () => {
             body: JSON.stringify(body),
         });
 
+        // const response = await fetch("http://localhost:9000", data, {
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         "TallyRequest": "Export",
+        //         "Type": "collection",
+        //         "Id": "Ledger"
+        //     }
+        // });
+        const LocalReponseData = await response.json();
+        console.log("TALLY RESPONSE:");
+        console.log(LocalReponseData.data.collection[0]);
 
-        await fetch("http://localhost:3000/fromTally", {
-            method: "POST",
-            headers: { "Content-Type": "application/octet-stream" },
-               duplex: "half",
-            body: tallyRes.body
-        });
+        fs.writeFileSync("./Data/fromTally.json", JSON.stringify(LocalReponseData.data.collection));
+
     } catch (err) {
         console.error("Import Failed");
         console.log(err.response?.data || err.message);
-    };
+    }
 };
 
 LocalFuncReadFromTally();
